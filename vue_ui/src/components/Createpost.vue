@@ -24,7 +24,7 @@
           
           
         >
-<v-card flat  class="  white" elevation="2">
+<v-card text  class="  white" elevation="2">
    
     <v-row
     class="justify-center"

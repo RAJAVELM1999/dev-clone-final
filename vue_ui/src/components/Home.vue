@@ -8,7 +8,7 @@
   <v-app-bar app class="grey lighten-5" permanent  elevation="2">
        <router-link to="/" >
       <v-btn dark color="black" class="ma-4" id="dev" >DEV</v-btn> </router-link>
-         <v-text-field append-icon="mdi-magnify" outlined class="ma-9 mt-16" color="indigo accent-2" placeholder="search...">
+         <v-text-field dense append-icon="mdi-magnify" outlined class="ma-9 mt-16" color="indigo accent-2" placeholder="search...">
              
          </v-text-field>
     <v-spacer></v-spacer>

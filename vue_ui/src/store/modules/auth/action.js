@@ -51,28 +51,32 @@ async addActionRegister(context,value){
 },
 
 async getActionRegister({commit}){
-  
+ 
   const response = await apolloClient.query({
      
          query: getRegisterQuery()
      });
+     debugger; // eslint-disable-line no-debugger
      commit('Reg_GET_MUT', response);
  console.log(response);
 },
 
-async myActionvalidate(context, value) {
-  debugger; // eslint-disable-line no-debugger
-  const response = await apolloClient.query({query: getRegisterQuery() });
+async myActionvalidate({commit}, value) {
+  // debugger; // eslint-disable-line no-debugger
+  const response = await apolloClient.query({query: getRegisterQuery()});
   const value1 = response.data.getAll;
+  // const value2 = response.data.getAll.password;
   
-
-  if (value.email == value1.email && value.password ==value1.password) {
-      context.commit('Login_MUT')
+  debugger; // eslint-disable-line no-debugger
+  if (value.email == value1 && value.password == value1) {
+      commit('Login_MUT')
 
   } else {  
       alert("Check The Username And Password !! ");
       // context.commit('Login_MUT')
   }
+  commit('Reg_GET_MUT', response);
+ console.log(response);
 
 },
 

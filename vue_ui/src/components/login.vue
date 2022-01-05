@@ -3,7 +3,7 @@
     {{regdata}}
        <v-row class="justify-center" >
 <v-col cols="" md="5">
-      <v-card flat class="mt-0"
+      <v-card text class="mt-0"
   elevation="2">
    <v-row class="justify-center">
   <v-col cols="8" md="11">
@@ -40,8 +40,8 @@ data(){
     checkbox:"",
     logindata:{
       email:"",
-      password:"",
-    }
+      password:""
+    },
   }
 },
 computed:{
@@ -53,6 +53,7 @@ created() {
       // this.initialize()
       
     this.getActionRegister()
+    // this.myActionvalidate()
    
     },
 
@@ -62,7 +63,7 @@ methods:{
     
     this.$store.dispatch('myActionvalidate',this.logindata)
   },
-  ...mapActions(['getActionRegister'])
+  ...mapActions(['getActionRegister','myActionvalidate'])
 
 },
 

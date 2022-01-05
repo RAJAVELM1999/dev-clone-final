@@ -13,7 +13,7 @@
          </v-text-field>
     <v-spacer></v-spacer>
   <router-link to="/Login" >
-    <v-btn class="ma-2 " flat icon id="btn1"
+    <v-btn class="ma-2" icon id="btn1"
       
      
     >Log in</v-btn> </router-link>

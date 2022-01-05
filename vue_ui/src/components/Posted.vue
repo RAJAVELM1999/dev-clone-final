@@ -6,17 +6,17 @@
       
       <v-row dense justify="center">
          <!-- v-for="card in createpost.creAll" :key="card.title" -->
-
+         
         <v-col 
         id="col"
           
-          v-for="(card, index) in createpost.creAll" :key="index"
+          v-for="(card, index) in createpost.data.creAll" :key="index"
           
           cols=8
           
           
         >
-          <v-card flat>
+          <v-card >
                <!-- <v-avatar left="true">
       <img
         src="https://cdn.vuetifyjs.com/images/john.jpg"
@@ -37,12 +37,18 @@
                 >
                     <v-icon>mdi-heart</v-icon>hello
                 </v-btn> -->
+ 
+              <v-btn id="btnlikecmt1" @click="incrementcount(card.id)+likesONE(card.id)" class="ma-3">
+            
+               <v-icon id="like" :color=color.green>mdi-heart</v-icon>
 
-              <v-btn id="btnlikecmt1" @click="incrementcount" class="ma-3">
-               <v-icon id="like" :color=color>mdi-heart</v-icon>{{count}} reactions
+              <!-- <v-icon large left :class="{ 'green': computer.Online === '1' }"
+          >mdi-heart</v-icon> -->
+
+               {{likes[card.id]}}{{count[card.id]}} reactions
               </v-btn> 
 
-              <v-btn  id="btnlikecmt" flat >
+              <v-btn  id="btnlikecmt" text >
                 <v-icon >mdi-comment</v-icon> Add Comment
               </v-btn>
 
@@ -63,9 +69,21 @@ export default {
     name:"Posted",
 data(){
     return{
+      
       fav: true,
       count:'0',
-      color:"grey",
+      likes:{},
+      
+      color:{
+        green: 'green',
+        grey: 'grey',
+        red: 'red'
+
+      },
+      ARYcreatpost:[],
+      colors: {
+        
+      }
 
 //  cards: [
        
@@ -77,7 +95,7 @@ data(){
 computed:{
 ...mapState({
   
-     createpost: (state) => state.auth.createpost.data,
+     createpost: (state) => state.auth.createpost,
 
 })
 },
@@ -86,19 +104,52 @@ computed:{
       
       this.getActionCreatepost()
       
-
+      // this.getpost()
    
     },
 methods:{
 ...mapActions([
       'getActionCreatepost',
     ]),
-    incrementcount(){
-      this.count++
-      if(this.count >=1){
-          this.color="red"
-      }
+
+
+    incrementcount(postId){
       
+      this.count++
+      
+      if(this.count >=1){
+       
+       
+        this.likes[postId]=((this.likes[postId] || 0)+1);
+         
+      }
+      // if(this.count >=1)
+      // {
+      //   this.color="green"
+      // }
+      
+      // if(this.count <=0 ){
+      //   this.color="grey"
+      // }
+      
+       
+     
+      
+      
+    },
+    likesONE(postId){
+     debugger; // eslint-disable-line no-debugger
+        this.count++
+      
+      if(this.count >=1){
+        
+       
+        this.likes[postId]=((this.likes[postId] || 0)+1);
+         
+      }
+    },
+    getpost(){
+      this.ARYcreatpost=this.createpost
     }
 
 }
@@ -136,5 +187,14 @@ border-radius: 20px;
 .v-btn {
   text-transform:none !important;
   
+}
+/* #like:active{
+  color:red;
+}
+i.v-icon.v-icon#like {
+  color: red;
+}  */
+#btnlikecmt1:active{
+  color: red;
 }
 </style>
