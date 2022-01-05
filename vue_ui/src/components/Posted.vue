@@ -38,9 +38,10 @@
                     <v-icon>mdi-heart</v-icon>hello
                 </v-btn> -->
  
-              <v-btn id="btnlikecmt1" @click="incrementcount(card.id)+likesONE(card.id)" class="ma-3">
-            
-               <v-icon id="like" :color=color.green>mdi-heart</v-icon>
+              <v-btn id="btnlikecmt1" @click="incrementcount(card.id)" class="ma-3" text>
+                
+               <v-icon id="like" :style= "likes[card.id] > 0 ? 'color: red' : 'color:grey '">mdi-heart</v-icon>
+
 
               <!-- <v-icon large left :class="{ 'green': computer.Online === '1' }"
           >mdi-heart</v-icon> -->
