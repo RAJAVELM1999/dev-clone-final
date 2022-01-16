@@ -8,7 +8,8 @@
   <v-app-bar app class="grey lighten-5" permanent  elevation="2">
        <router-link to="/" >
       <v-btn dark color="black" class="ma-4" id="dev" >DEV</v-btn> </router-link>
-         <v-text-field dense append-icon="mdi-magnify large"  outlined class="ma-9 mt-16" color="indigo accent-2" placeholder="search...">
+         
+         <v-text-field dense append-icon="mdi-magnify"  outlined class="ma-9 mt-16 ml-2 shrink " color="indigo accent-2" placeholder="search...">
              
          </v-text-field>
     <v-spacer></v-spacer>
@@ -58,7 +59,7 @@ Made with love and <a :href="'/job/'">Ruby on Rails.</a> DEV Community © 2016 -
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
 data(){
     return{
@@ -70,17 +71,18 @@ computed:{
 },
   created() {
       // this.initialize()
-      
+      this.defaultpost()
     
    
     },
 methods:{
+   ...mapGetters(['defaultpost']),
   
 }
 }
 </script>
 
-<style>
+<style >
 #crtact:hover{
   background-color: rgb(64, 99, 255);
   color: white;
@@ -107,13 +109,7 @@ a:hover{
    
 }
 #search{
-    
-    padding: 10px;
-     margin-top: 10px;
-    /* margin-bottom: 10%; */
-    width: 5%; 
-    height:109%
-   
+    border-radius: 25px;
 }
 #dev{
      font-weight: bold;
@@ -124,4 +120,7 @@ a:hover{
 a { 
   text-decoration: none;
    }
+
+  
 </style>
+

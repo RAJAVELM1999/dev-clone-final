@@ -3,18 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "nodemon serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@mdi/font": "^6.5.95",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link-error": "^1.1.12",
     "apollo-upload-client": "^12.1.0",
+    "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "graphql": "^16.2.0",
     "graphql-tag": "^2.12.6",
+    "nodemon": "^2.0.15",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.1",
     "vue-router": "^3.2.0",

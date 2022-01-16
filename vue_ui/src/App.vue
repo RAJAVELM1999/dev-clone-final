@@ -10,7 +10,23 @@
   </v-app>
 </template>
 
+<script>
+export default {
+  component(){
+
+  },
+  created(){
+    // debugger; // eslint-disable-line no-debugger 
+    
+    
+           
+    this.$store.dispatch('userAction', localStorage.getItem('user'))
+  }
+}
+</script>
+
 <style lang="scss">
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

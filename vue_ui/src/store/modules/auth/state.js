@@ -1,11 +1,25 @@
 
 const state = {
-
+  defaultval: "Not Have A Post Yet",
   userdata: [],
 
   regdata: [],
 
-  createpost: [],
+  createpost: [{}],
+
+  readpostlist: [{}],
+  commentlist: [{}],
+
+  token: null,
+  user: null,
+  eRules: [
+    (v) => !!v || "Email is required",
+    v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+  ],
+  pRules: [
+    (v) => !!v || "Enter the Password ",
+    (v) => (v && v.length >= 8) || 'Password at least 8 character',
+  ],
 
   // name: "",s
   // password: "",

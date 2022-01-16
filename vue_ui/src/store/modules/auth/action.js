@@ -1,5 +1,6 @@
-const { getcreatepostsQuery,putcreatepostQuery,putRegisterQuery,getRegisterQuery } =require ('../../../apiQueries/level');
+const { getcreatepostsQuery,putcreatepostQuery,putReadlisttQuery,getReadlisttQuery,getCommentQuery,putCommentQuery} =require ('../../../apiQueries/level');
 const { apolloClient} = require('../../../apollo');
+const axios = require('axios');
 
 const actions = {
   
@@ -10,15 +11,17 @@ const actions = {
            query: getcreatepostsQuery()
            
        });
+      //  debugger; // eslint-disable-line no-debugger
        commit('post_GET_MUT', response);
    console.log(response);
 },
 
 async addActionCreatepost(context,value){
-  
+  // debugger; // eslint-disable-line no-debugger 
   const response = await apolloClient.mutate({
-     
+    
          mutation: putcreatepostQuery(),
+         
          variables: {
              cret:{title:value.title,tags:value.tags,description:value.description}
              //  post:{name,type,identifier:this.levelInput}
@@ -31,14 +34,15 @@ async addActionCreatepost(context,value){
   context.commit('Add_POST_MUT', value);
  console.log(response);
 },
-
-async addActionRegister(context,value){
-  
+// ================================================
+async addCommentAction(context,value){
+  // debugger; // eslint-disable-line no-debugger 
   const response = await apolloClient.mutate({
-     
-         mutation: putRegisterQuery(),
+    
+         mutation: putCommentQuery(),
+         
          variables: {
-             regs:{name:value.name,email:value.email,password:value.password}
+          cmntls:{createpostid:value.obj1,comments:value.obj2}
              //  post:{name,type,identifier:this.levelInput}
          }
 
@@ -46,39 +50,170 @@ async addActionRegister(context,value){
 
 
 
-  context.commit('Addreg_POST_MUT', value);
+  context.commit('Add_CMNT_MUT', value);
  console.log(response);
 },
 
-async getActionRegister({commit}){
- 
+async getActionComments({commit}){
+  // debugger; // eslint-disable-line no-debugger
   const response = await apolloClient.query({
      
-         query: getRegisterQuery()
+         query: getCommentQuery()
+         
      });
-     debugger; // eslint-disable-line no-debugger
-     commit('Reg_GET_MUT', response);
+     
+     commit('CMNT_GET_MUT', response.data.cmtAll);
  console.log(response);
 },
 
-async myActionvalidate({commit}, value) {
+
+// ================================================
+async addReadinglistAction(context,value){
+  // debugger; // eslint-disable-line no-debugger 
+  const response = await apolloClient.mutate({
+    
+         mutation: putReadlisttQuery(),
+         
+         variables: {
+             read:{title:value.title,tags:value.tags,description:value.description,creatpostid:value.id}
+             //  post:{name,type,identifier:this.levelInput}
+         }
+
+     });
+
+
+
+  context.commit('Add_READ_MUT', value);
+ console.log(response);
+},
+// ========================================================
+async getActionReadlist({commit}){
   // debugger; // eslint-disable-line no-debugger
-  const response = await apolloClient.query({query: getRegisterQuery()});
-  const value1 = response.data.getAll;
-  // const value2 = response.data.getAll.password;
-  
-  debugger; // eslint-disable-line no-debugger
-  if (value.email == value1 && value.password == value1) {
-      commit('Login_MUT')
-
-  } else {  
-      alert("Check The Username And Password !! ");
-      // context.commit('Login_MUT')
-  }
-  commit('Reg_GET_MUT', response);
+  const response = await apolloClient.query({
+     
+         query: getReadlisttQuery()
+         
+     });
+     
+     commit('READ_GET_MUT', response.data.readAll);
  console.log(response);
+},
+// =======================================================
+// async defaultpost(gettt){
+//   if((state.createpost).length <=0)
+//       {
+//         return state.defaultval
+       
+//       }
+// },
+
+
+async SignoutAction({ commit }) {
+  commit('SET_TOKEN', null)
+  commit('SET_USER', null)
+  // commit('Signout_Mut')
+
 
 },
+
+// =====================================================
+
+
+
+
+// ==================================================
+// async addActionRegister(context,value){
+  
+//   const response = await apolloClient.mutate({
+     
+//          mutation: putRegisterQuery(),
+//          variables: {
+//              regs:{name:value.name,email:value.email,password:value.password}
+//              //  post:{name,type,identifier:this.levelInput}
+//          }
+
+//      });
+
+
+
+//   context.commit('Addreg_POST_MUT', value);
+//  console.log(response);
+// },
+
+// async getActionRegister({commit}){
+ 
+//   const response = await apolloClient.query({
+     
+//          query: getRegisterQuery()
+//      });
+//     //  debugger; // eslint-disable-line no-debugger
+//      commit('Reg_GET_MUT', response);
+//  console.log(response);
+// },
+async registeraction(_,regdata){
+  const response= await axios.post('register', regdata)
+          
+  console.log(response.data);
+},
+
+
+
+
+// =================================================================
+
+// async myActionvalidate({commit}, value) {
+//   // debugger; // eslint-disable-line no-debugger
+//   const response = await apolloClient.query({query: getRegisterQuery()});
+//   const value1 = response.data.getAll;
+//   // const value2 = response.data.getAll.password;
+  
+//   // debugger; // eslint-disable-line no-debugger
+//   if (value.email == value1[0].email && value.password == value1[0].password) {
+//       commit('Login_MUT')
+
+//   } else {  
+//       alert("Check The Username And Password !! ");
+//       // context.commit('Login_MUT')
+//   }
+//   commit('Reg_GET_MUT', response);
+//  console.log(response);
+
+// },
+// =================================================================
+async LoginAction({ dispatch }, logindata) {
+  const response = await axios.post('login', logindata)
+  //  console.log(response.data);
+  dispatch('userAction', response.data.name)
+
+  return dispatch('AttemptAction', response.data.token)
+
+
+},
+
+async AttemptAction({ state, commit }, token) {
+
+  // const token = response.data.token
+
+  if (token) {
+
+    commit('SET_TOKEN', token)
+
+  }
+
+  if (!state.token) {
+    return
+  }
+},
+
+async userAction({ commit }, user) {
+  // const user = response.data
+  // debugger; // eslint-disable-line no-debugger
+  commit('SET_USER', user)
+},
+
+// ====================================================
+
+
 
 
 

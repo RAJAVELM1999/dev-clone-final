@@ -5,7 +5,9 @@ import Login from '../components/login.vue'
 import Createpost from '../components/Createpost.vue'
 import Register from '../components/NewRegister.vue'
 import Posted from '../components/Posted.vue'
-import homelog from '../components/Home.vue'
+import homelog from '../components/homelog.vue'
+import store from '../store'
+import Readlist from '../components/Readlist.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -40,12 +42,29 @@ const routes = [
     path: "/homelog",
     name: "homelog",
     component: homelog,
+    beforeEnter: (to, from, next) => {
+      // console.log(store.getters);
+      if (!store.getters['authenticated']) {
+        return next({
+          name: 'Login'
+        })
+      }
+
+      next()
+    },
     children: [
       {
         path: "/homelog",
-        name: "Posted",
+        name: "homelog",
         component: Posted,
       },
+      {
+        path: "/Readlist",
+        name: "Readlist",
+        component: Readlist,
+      },
+
+
     ],
 
   },
@@ -54,6 +73,16 @@ const routes = [
     path: "/Createpost",
     name: "Createpost",
     component: Createpost,
+    beforeEnter: (to, from, next) => {
+      // console.log(store.getters);
+      if (!store.getters['authenticated']) {
+        return next({
+          name: 'Login'
+        })
+      }
+
+      next()
+    },
   },
   {
     path: '/about',
@@ -63,12 +92,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
-  {
-    path: '/createpost',
-    name: 'Createpost',
-    component: Createpost,
 
-  },
 
 ]
 
