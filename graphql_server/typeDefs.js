@@ -14,11 +14,28 @@ type Cre{
     description: String
     tags: String
 }
+type Readlst{
+    id: ID
+    title: String
+    tags: String
+    description: String
+    creatpostid: String
+    
+}
+type Comments{
+    id: ID
+    createpostid: String
+    comments: String
+    
+    
+}
 type Query
 {
     hello:String
     getAll:[Reg]
     creAll:[Cre]
+    readAll:[Readlst]
+    cmtAll:[Comments]
 }
 
 input RegInput
@@ -35,6 +52,25 @@ input CreInput
     tags: String
 
 }
+input ReadlstInput
+{   
+    title: String
+    tags: String
+    description: String
+    creatpostid: String
+    
+
+}
+input CmntInput
+{   
+    
+    
+    createpostid: String
+    comments: String
+    
+
+}
+
 
 input IdInput
 {
@@ -45,6 +81,8 @@ type Mutation
 {
     createReg(regs:RegInput):Reg
     createPost(cret:CreInput):Cre
+    readList(read:ReadlstInput):Readlst
+    commentsList(cmntls:CmntInput):Comments
     deletePost(id:IdInput):String
 
     

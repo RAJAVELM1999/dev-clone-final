@@ -3,33 +3,72 @@
     
      <v-container id="vcontain" >
        <!-- {{createpost}} -->
+      <!-- <h3>
+        <v-alert
+      dense
+      type="info" v-show="alert"> {{defaultval}}
       
-      <v-row dense justify="center">
+    </v-alert>
+        
+        </h3>  -->
+        <h3 v-if="createpost.length <=0">
+          <v-alert
+            dense
+            type="info" >
+          Not Hav A Post Yet!!! Post Atlest '1' To Remove The Highlights.
+          </v-alert>
+        </h3>
+      <v-row dense justify="center" >
          <!-- v-for="card in createpost.creAll" :key="card.title" -->
          
         <v-col 
         id="col"
           
-          v-for="(card, index) in createpost.data.creAll" :key="index"
           
-          cols=8
+          cols=7
+          sm=auto
+          md=7
+          xs=auto
+          :default="'Dont Have Post Yet'"
           
           
         >
-          <v-card >
-               <!-- <v-avatar left="true">
-      <img
-        src="https://cdn.vuetifyjs.com/images/john.jpg"
-        alt="John"
-      >
-</v-avatar> -->
-           
-             <v-card-title id="title">{{card.title}}</v-card-title>
-            <v-card-title v-text="card.tags" id="tags" ></v-card-title> 
-            <v-card-title  v-text="card.description" class="text-x5-left" ></v-card-title>
-       
+        
+          <v-card class="ma-3 pa-2 text" elevation="1" id="card" cols="auto" 
+          v-for="(card, index) in createpost" :key="index" @click="sendpostbrief(card.id)">
+      
+                <v-row class="mt-2 ">
+                  <v-col cols="1" ></v-col>
+                        <!-- <v-card-media
+            src="https://raw.githubusercontent.com/ijklim/simon-game/gh-pages/assets/img/bg--game-pad.jpg"
+            height="150px">
+                      </v-card-media> -->
+    
 
-            <v-card-actions  dense>
+                              <v-avatar>
+                    <img
+                      src="https://cdn.vuetifyjs.com/images/john.jpg"
+                      alt="John"
+                    >
+
+                    </v-avatar>
+                    <p>{{name}}</p> 
+                   
+                    <!-- <p class="mr-10 mt-5">Jan 7(2 hours ago)</p> -->
+    <!-- <v-avatar color="red">
+      <span class="white--text text-h5">CJ</span>
+    </v-avatar> -->
+                      </v-row>
+
+                       
+           
+                <v-col class="ml-3 mr-5">
+                 <v-card-title id="title" v-model="post.title">{{card.title}}</v-card-title>
+            <v-card-title v-text="card.tags" id="tags" v-model="post.tags"></v-card-title> 
+            <v-card-title  v-text="card.description" class="text-x5-left" v-model="post.description"></v-card-title>
+       
+      
+            <v-card-actions>
               <!-- <v-btn
                   :class="fav ? 'red--text' : ''"
                   icon
@@ -37,10 +76,10 @@
                 >
                     <v-icon>mdi-heart</v-icon>hello
                 </v-btn> -->
- 
-              <v-btn id="btnlikecmt1" @click="incrementcount(card.id)" class="ma-3" text>
                 
-               <v-icon id="like" :style= "likes[card.id] > 0 ? 'color: red' : 'color:grey '">mdi-heart</v-icon>
+                  <v-btn id="btnlikecmt1" @click="incrementcount(card.id)" class="ma-3" text>
+                
+               <v-icon id="like" :style= "likes[card.id] > 0 ? 'color: red' : 'color: ' ">mdi-heart-outline</v-icon> &nbsp;
 
 
               <!-- <v-icon large left :class="{ 'green': computer.Online === '1' }"
@@ -48,14 +87,41 @@
 
                {{likes[card.id]}}{{count[card.id]}} reactions
               </v-btn> 
-
-              <v-btn  id="btnlikecmt" text >
-                <v-icon >mdi-comment</v-icon> Add Comment
+              <!-- {{card.id}} -->
+              <v-btn  id="btnlikecmt" text   v-on:click="addcommtmethods(index)">
+             
+                  <v-icon id="like">mdi-comment-text-outline </v-icon> &nbsp;  {{comment[card.id]}}{{count[card.id]}} Comments
+                
               </v-btn>
 
-            <v-spacer></v-spacer>
-              <v-btn id="sv">save</v-btn>
-            </v-card-actions>
+            
+              <p class="mt-4">2 min read </p><v-btn id="sv" @click="examolpmethods(card)">Save</v-btn>
+
+                </v-card-actions>
+                
+              
+                <v-card-actions class="d-flex align-stretch mb-6" v-if="name">
+                
+                 <v-row>
+                   <v-col cols="11">
+                    
+                      <v-card  v-show="enablecomment==[index]" id="cmtsection"> 
+                   
+                <v-textarea  v-model="pcomments" placeholder="Comments to be here..."></v-textarea>
+                <v-btn @click="subcommt(card.id)" text id="submitcmnt">Submit</v-btn>
+                <v-btn @click="enablecomment=null" text>Cancel</v-btn>
+              
+                  </v-card>
+                   </v-col>
+                 </v-row>
+                 
+                
+              </v-card-actions>
+             
+            
+
+           </v-col>
+            
           </v-card>
         </v-col>
       </v-row>
@@ -65,15 +131,24 @@
 
 
 <script>
-import {mapState,mapActions} from 'vuex'
+
+
+import {mapState,mapActions, mapGetters} from 'vuex'
+// import store from '../store'
 export default {
     name:"Posted",
+     
 data(){
     return{
-      
+      pcomments:'',
+      enablecomment:'',
+      alert:true,
+     defaultval:"", 
+      value_cmt:"Add",
       fav: true,
       count:'0',
       likes:{},
+      comment:"",
       
       color:{
         green: 'green',
@@ -82,9 +157,13 @@ data(){
 
       },
       ARYcreatpost:[],
-      colors: {
-        
-      }
+      post:{
+        title:"",
+        tags:"",
+        description:""
+
+      },
+      name:"",
 
 //  cards: [
        
@@ -94,28 +173,47 @@ data(){
     }
 },
 computed:{
+   
 ...mapState({
-  
+   
      createpost: (state) => state.auth.createpost,
-
-})
+      // defaultval: (state) => state.auth.defaultval,
+      commentlist: (state) => state.auth.commentlist,
+}),
 },
-  created() {
+  
+  created(){
       // this.initialize()
-      
-      this.getActionCreatepost()
-      
+      this.authenticated(),
+      // this.defultmethods(),
+      this.getActionCreatepost(),
+      this.usernamefromtoken()
       // this.getpost()
    
     },
+
 methods:{
 ...mapActions([
       'getActionCreatepost',
     ]),
+    ...mapGetters(['authenticated']),
+// ================================================================
+    addcomment(cardid){
+          this.count++
+      
+      if(this.count >=1){
+       
+       
+        this.comment[cardid]=((this.comment[cardid] || 0) +cardid(this.enablecomment=true ));
+         
+      }
 
 
+    },
+// ======================================================================
     incrementcount(postId){
       
+      console.log(postId);
       this.count++
       
       if(this.count >=1){
@@ -133,31 +231,96 @@ methods:{
       //   this.color="grey"
       // }
       
+      
        
      
       
       
     },
-    likesONE(postId){
-     debugger; // eslint-disable-line no-debugger
-        this.count++
+    // ==============================================================
+   
+   sendpostbrief(cardid)
+   {
+     console.log(cardid);
+     this.$router.push('PostedBrief(cardid)')
+   },
+  //  =================================================================
+   subcommt(value){
+      // debugger; // eslint-disable-line no-debugger
+
+     console.log(value,this.pcomments);
+     this.$store.dispatch('addCommentAction',{obj1:value,obj2:this.pcomments})
+     this.enablecomment=null
+     this.pcomments=null
+
+
+   },
+
+   usernamefromtoken(){
+   this.name=localStorage.getItem('user')
+    },
+// ==========================================
+
+    addcommtmethods(index){
+
+   
+      this.enablecomment=index
+      console.log("welcome",index);
+      // index[this.enablecomment=true];
+    
+                  
+      // this.enablecomment[index]=true
       
-      if(this.count >=1){
+      console.log("hi there",index);
+      // console.log(this.comment);
+    },
+
+    // ================================================================
+  examolpmethods(value)
+  { 
+    console.log(value);
+    this.$store.dispatch('addReadinglistAction',value)
+  },
+
+  
+  savetoreadinglist(cardid){
+    this.$store.dispatch('ReadinglistAction',cardid);
+
+
+  },
+
+
+
+    // =============================================================
+
+    defultmethods(){
+    //  debugger; // eslint-disable-line no-debugger
+     
+      
+     
+      if(this.createpost.length <=0){
         
-       
-        this.likes[postId]=((this.likes[postId] || 0)+1);
-         
+        console.log('check 1',this.createpost.length);
+        // this.defaultval="Not Hav A Post Yet!!! Post Atlest '2' To Remove The Highlights."
+      }
+      else{
+      //  this.defaultval=null;
+      this.alert=false
+      //  console.log('check 0',value1);
       }
     },
-    getpost(){
-      this.ARYcreatpost=this.createpost
-    }
+
+
+  
+   
+    
 
 }
 }
 </script>
 
 <style>
+
 
 #title{
   font-weight: bold;
@@ -175,7 +338,11 @@ methods:{
   
 
 #sv{
-  background-color: rgb(170, 170, 170);
+  background-color: rgb(212, 212, 212);
+  border-radius: 7px;
+  
+  font-weight: solid;
+  font-family: Arial, Helvetica, sans-serif;
 }
 #tags:hover{
 background-color: rgba(red, green, blue, alpha);
@@ -198,4 +365,35 @@ i.v-icon.v-icon#like {
 #btnlikecmt1:active{
   color: red;
 }
+#card{
+  border-radius: 8px;
+  border-style: solid;
+  /* border-color: rgba(204, 204, 204, 0.973); */
+}
+.v-icon.outlined {
+                  border: 1px solid currentColor;
+                  border-radius:50%;
+                  height: 56px;
+                  width: 56px;
+}
+p{
+  padding: 7px;
+  margin-top: 4px;
+}
+#comment-div{
+  width:300px;
+  height:300px;
+  background-color:rgb(231, 214, 214);
+  background-repeat:no-repeat;
+  padding: 30px;
+  margin-block-end: 100%;
+}
+#submitcmnt:hover{
+  background-color: aquamarine;
+}
+#cmtsection:hover{
+  border-color: rgba(63, 63, 255, 0.795);
+  border: blue;
+}
+
 </style>

@@ -10,7 +10,7 @@
 //   component: HomeMain,
 // },
 
-const { default: router } = require("../../../router");
+// const { default: router } = require("../../../router");
 
 // const { router } = require('../../../router/index');
 
@@ -22,23 +22,56 @@ const { default: router } = require("../../../router");
 
 const mutations = {
   post_GET_MUT(state, value) {
-
-    state.createpost = value
+    // debugger; // eslint-disable-line no-debugger
+    state.createpost = value.data.creAll
 
   },
   Add_POST_MUT(state, value) {
+    // debugger; // eslint-disable-line no-debugger
     state.createpost.push(value)
   },
+  // ==========================================
+
+  CMNT_GET_MUT(state, value) {
+
+    // debugger; // eslint-disable-line no-debugger
+    state.commentlist = value
+
+  },
+  Add_CMNT_MUT(state, value) {
+    // debugger; // eslint-disable-line no-debugger
+    state.commentlist.push(value)
+  },
+  // ============================================
+  READ_GET_MUT(state, value) {
+
+    // debugger; // eslint-disable-line no-debugger
+    state.readpostlist = value
+
+  },
+  Add_READ_MUT(state, value) {
+    // debugger; // eslint-disable-line no-debugger
+    state.readpostlist.push(value)
+  },
+  // ==========================================
   Addreg_POST_MUT(value) {
     console.log("Sucessful msg for mutation" + value);
   },
-  Login_MUT() {
-    // alert("the action worked")
-    alert("Hi There Login Sucessfull msg from mutation")
-    router.push("homelog")
-    // router.push("HomeMain")
-
+  SET_TOKEN(state, token) {
+    state.token = token
   },
+  SET_USER(state, user) {
+    // debugger; // eslint-disable-line no-debugger
+    state.user = user
+  },
+  // Login_MUT() {
+  //   // alert("the action worked")
+  //   alert("Hi There Login Sucessfull msg from mutation")
+  //   router.push("homelog")
+  //   // router.push("HomeMain")
+
+  // },
+
   Reg_GET_MUT(state, value) {
     state.regdata = value
   }

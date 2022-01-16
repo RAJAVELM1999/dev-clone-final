@@ -26,7 +26,58 @@ export const putcreatepostQuery = () => {
   }
     `;
 };
-
+// ========================================
+export const putCommentQuery = () => {
+  return gql`
+  mutation commentsList($cmntls: CmntInput){
+    commentsList(cmntls: $cmntls) {
+      id
+      createpostid
+      comments
+    }
+  }
+    `;
+};
+export const getCommentQuery = () => {
+  return gql`
+  query{
+    cmtAll {
+      createpostid
+      id
+      comments
+    }
+  }
+      `;
+};
+// ==========================================
+export const putReadlisttQuery = () => {
+  return gql`
+  mutation readList($read: ReadlstInput){
+    readList (read: $read) {
+      title
+      tags
+      description
+      creatpostid
+      id
+    }
+  }
+    `;
+};
+export const getReadlisttQuery = () => {
+  return gql`
+  query{
+    readAll {
+     id
+     title
+     tags
+     description
+     creatpostid
+      
+    } 
+  }
+      `;
+};
+// ========================================
 export const putRegisterQuery = () => {
   return gql`
   mutation createReg($regs: RegInput){

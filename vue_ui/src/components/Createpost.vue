@@ -1,57 +1,90 @@
 <template>
 <div class="grey lighten-3"> 
-
+<v-dialog v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-transition">
     <v-app-bar app class="grey lighten-3">
      <router-link to="/homelog" > <v-btn dark color="black" class="ma-5" id="dev">DEV</v-btn> </router-link>  &nbsp; &nbsp; &nbsp;
       <h3>Create Post</h3> 
 <v-spacer></v-spacer>
 <router-link to="/homelog" >
- <v-icon>mdi-close</v-icon> </router-link>
-
+ 
+  <v-btn
+            icon
+            
+            @click="dialog = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+</router-link>
     </v-app-bar>
 
   <div class="grey lighten-3">
     
 <v-main  class="grey lighten-3 justify-center">
      <v-row
-    class="justify-center"
+    class="justify-left"
     >
         <v-col
-          cols="11"
+          cols="16"
           
-          md="5"
+          
+          class="ml-9 mr-5"
          
           
           
         >
 <v-card text  class="  white" elevation="2">
-   
+ 
+    <v-row justify="start" >
+            <v-col cols="5">
+
+                 <v-btn outlined class="ml-5 mt-3" >Add a cover image</v-btn>
+            </v-col>
+            
+     
+          </v-row>
     <v-row
-    class="justify-center"
+    class="justify-left"
     >
         <v-col
-          cols="11"
-          
-          md="13"
-         
-          
-          
-        >
-    
-    <v-text-field v-model="creatpostdata.title" flat solo placeholder="Title"></v-text-field>
+          cols="11">
+
+        
+    <v-text-field v-model="creatpostdata.title" flat solo placeholder="New post title to be here..." id="title11"></v-text-field>
    
-    <v-text-field v-model="creatpostdata.tags" flat solo placeholder="Tags"></v-text-field>
+   <!-- <v-select
+  id="select"
+  chips
+  clearable
+  multiple
+  v-model="creatpostdata.tags" 
+  flat 
+  solo 
+  placeholder="Add upto 4 tags..."
+  :items=items
+  item-text="name"
+ item-value="identifier"
+></v-select> -->
+      <v-text-field
+  id="select"
+  chips
+  clearable
+  multiple
+  v-model="creatpostdata.tags" 
+  flat 
+  solo 
+  placeholder="Add upto 4 tags..."
+  :items=items
+  item-text="name"
+ item-value="identifier"
+></v-text-field>
    <v-row
-    class="justify-center"
+    class="justify-left"
     >
-        <v-col
-          cols="11"
-          
-          md="20"
-         
-          
-          
-        >
+        <v-col  
+          cols="">
     <v-toolbar dense>
     <v-overflow-btn
       :items="dropdown_font"
@@ -128,7 +161,7 @@
       </v-btn-toggle>
     </template>
   </v-toolbar>
-    <v-textarea v-model="creatpostdata.description" flat solo placeholder="Description" ></v-textarea>
+    <v-textarea v-model="creatpostdata.description" flat solo placeholder="Write your post content here..." id="desc" ></v-textarea>
     </v-col></v-row>
     
         </v-col></v-row>
@@ -146,6 +179,7 @@
 
 </v-main>
 </div>
+</v-dialog>
 </div>
   
 </template>
@@ -155,6 +189,13 @@ export default {
 name:"Createpost",
   data () {
       return {
+        dialog: true,
+         items:[
+           {name:'vuejs s1',identifier:'vuejs'},
+           {name:'nuxt v1',identifier:'nuxt'},
+           {name:'dm c1',identifier:'digital marketing'},
+
+         ],
         dropdown_font: [
           { text: 'Arial' },
           { text: 'Calibri' },
@@ -175,9 +216,16 @@ name:"Createpost",
     methods:{
         
         addCreatepost() {
-      
-        this.$store.dispatch('addActionCreatepost', this.creatpostdata)
-        alert("Post Added Sucessfully !!!")
+      // debugger; // eslint-disable-line no-debugger 
+        this.$store.dispatch('addActionCreatepost', this.creatpostdata).then(()=>{
+              alert('New Post Added Sucessfully')
+              this.$router.push({
+                  name:'homelog'
+              })
+          }).catch(()=>{
+            
+              console.log("error on posting a data");
+          })
      
       },
       }
@@ -200,6 +248,16 @@ name:"Createpost",
 
 
 }
+#title11{
+  color: rgb(17, 61, 46);
+  font-weight: bold;
+  font-size: 45px;
+  
 
+}
+#select,#desc{
+  font-size: 20px;
+
+}
 
 </style>
