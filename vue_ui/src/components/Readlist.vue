@@ -1,7 +1,10 @@
 <template>
   <div>
+      
       <h4>
+         
           Saved Post's
+           <h3>the posts are</h3>
       </h4>
       <v-card  v-for="(card, index) in readpostlist" :key="index" class="ma-2">
         
